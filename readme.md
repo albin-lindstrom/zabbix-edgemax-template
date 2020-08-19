@@ -6,10 +6,11 @@ This template allows you to quickly get up and running with monitoring of Ubiqui
 
 ## ⚙️ Installation
 
-1. Import *zbx_edgemax_template.xml* to Zabbix (Configuration -> Templates -> Import)
-2. Add the template *Template EdgeMAX SNMPv2* to your host and configure 
+1. Select a branch according to your Zabbix version and download the xml.
+2. Import *zbx_edgemax_template.xml* to Zabbix (Configuration -> Templates -> Import)
+3. Add the template *Template EdgeMAX SNMPv2* to your host and configure 
    1. Add *{$SNMP_COMMUNITY}* to your host's macros and configure it. (default is usually public)
-3. Enable the *SNMP* agent on your EdgeMAX device.
+4. Enable the *SNMP* agent on your EdgeMAX device.
    1. Set *SNMP community* to the same value as your macro or the other way around.
 
 ## 🏷️ Features
