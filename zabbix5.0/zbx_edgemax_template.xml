@@ -13,7 +13,7 @@
             <name>Template EdgeMAX SNMPv2</name>
             <templates>
                 <template>
-                    <name>Template Net Network Generic Device SNMP</name>
+                    <name>Template Net Network Generic Device SNMPv2</name>
                 </template>
             </templates>
             <groups>
