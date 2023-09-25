@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>6.0</version>
+    <date>2023-09-25T16:14:01Z</date>
+    <groups>
+        <group>
+            <uuid>36bff6c29af64692839d077febfc7079</uuid>
+            <name>Templates/Network devices</name>
+        </group>
+    </groups>
+    <templates>
+        <template>
+            <uuid>51e0e9a9f0ca49569840767018bb586a</uuid>
+            <template>EdgeMAX SNMPv2</template>
+            <name>EdgeMAX SNMPv2</name>
+            <templates>
+                <template>
+                    <name>Network Generic Device by SNMP</name>
+                </template>
+            </templates>
+            <groups>
+                <group>
+                    <name>Templates/Network devices</name>
+                </group>
+            </groups>
+            <items>
+                <item>
+                    <uuid>62c2558cc3b24573bb425869bd680ae0</uuid>
+                    <name>Load average last 1 minute</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>1.3.6.1.4.1.2021.10.1.3.1</snmp_oid>
+                    <key>LoadMinute</key>
+                    <history>1d</history>
+                    <trends>0</trends>
+                    <value_type>CHAR</value_type>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>System Info</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>229564ad1b274f4887812a3af0ffafc6</uuid>
+                            <expression>last(/EdgeMAX SNMPv2/LoadMinute)&gt;{$LOAD_AVG_PER_CPU.MAX.WARN}</expression>
+                            <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                            <recovery_expression>last(/EdgeMAX SNMPv2/LoadMinute)&lt;{$LOAD_AVG_PER_CPU.MAX.WARN}</recovery_expression>
+                            <name>Load average is too high (per CPU load over {$LOAD_AVG_PER_CPU.MAX.WARN} for 1m)</name>
+                            <opdata>Load averages(1m): {ITEM.LASTVALUE1}</opdata>
+                            <priority>AVERAGE</priority>
+                            <description>Per CPU load average is too high. Your system may be slow to respond.</description>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>55d17189b0894e5bb5aed103ca860527</uuid>
+                    <name>Total amount of available memory</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>1.3.6.1.4.1.2021.4.6.0</snmp_oid>
+                    <key>MemAvailable</key>
+                    <history>7d</history>
+                    <trends>0</trends>
+                    <units>b</units>
+                    <preprocessing>
+                        <step>
+                            <type>MULTIPLIER</type>
+                            <parameters>
+                                <parameter>1000</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Memory</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>8a61a3d93e194ee7a44420db20b37de6</uuid>
+                    <name>Total amount of buffers</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>1.3.6.1.4.1.2021.4.14.0</snmp_oid>
+                    <key>MemBuffers</key>
+                    <history>7d</history>
+                    <trends>0</trends>
+                    <units>b</units>
+                    <preprocessing>
+                        <step>
+                            <type>MULTIPLIER</type>
+                            <parameters>
+                                <parameter>1000</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Memory</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>c858f465d2bb4651a23bcfa86596c371</uuid>
+                    <name>Total amount of cached</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>1.3.6.1.4.1.2021.4.15.0</snmp_oid>
+                    <key>MemCached</key>
+                    <history>7d</history>
+                    <trends>0</trends>
+                    <units>b</units>
+                    <preprocessing>
+                        <step>
+                            <type>MULTIPLIER</type>
+                            <parameters>
+                                <parameter>1000</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Memory</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>ba758bc30b3a47f69f834e6815589a2d</uuid>
+                    <name>Total amount of memory</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>1.3.6.1.4.1.2021.4.5.0</snmp_oid>
+                    <key>MemTotal</key>
+                    <history>7d</history>
+                    <trends>0</trends>
+                    <units>b</units>
+                    <preprocessing>
+                        <step>
+                            <type>MULTIPLIER</type>
+                            <parameters>
+                                <parameter>1000</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Memory</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>b3f2f99e384a492d8d838c007a9f1081</uuid>
+                    <name>Used memory</name>
+                    <type>CALCULATED</type>
+                    <key>MemUsed</key>
+                    <history>7d</history>
+                    <trends>0</trends>
+                    <units>B</units>
+                    <params>last(//MemTotal)-last(//MemAvailable)</params>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Memory</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>74e161402bc1440e8d30a413c7a0968e</uuid>
+                    <name>Memory utizilation</name>
+                    <type>CALCULATED</type>
+                    <key>MemUtil</key>
+                    <history>7d</history>
+                    <trends>0</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>%</units>
+                    <params>(last(//MemUsed)-last(//MemBuffers)-last(//MemCached))/last(//MemTotal)*100</params>
+                    <preprocessing>
+                        <step>
+                            <type>JAVASCRIPT</type>
+                            <parameters>
+                                <parameter>return Math.floor(value)</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Memory</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>a30deff68b824ca2b8cd81ae889cdf2f</uuid>
+                            <expression>min(/EdgeMAX SNMPv2/MemUtil,5m)&gt;{$MEMORY.UTIL.MAX}</expression>
+                            <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                            <recovery_expression>max(/EdgeMAX SNMPv2/MemUtil,5m)&lt;{$MEMORY.UTIL.MAX}</recovery_expression>
+                            <name>High memory utilization ( &gt;{$MEMORY.UTIL.MAX}% for 5m)</name>
+                            <opdata>Memory utilization: {ITEM.LASTVALUE1}</opdata>
+                            <priority>WARNING</priority>
+                            <description>The system is running out of free memory.</description>
+                        </trigger>
+                    </triggers>
+                </item>
+            </items>
+            <discovery_rules>
+                <discovery_rule>
+                    <uuid>36f64bd4b35d41d9a8fde299df72ca9a</uuid>
+                    <name>Network interfaces discovery</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>discovery[{#IFOPERSTATUS},1.3.6.1.2.1.2.2.1.8,{#IFNAME},1.3.6.1.2.1.31.1.1.1.1]</snmp_oid>
+                    <key>NetworkInterface</key>
+                    <delay>1d</delay>
+                    <item_prototypes>
+                        <item_prototype>
+                            <uuid>a922c4529f82490287f0cbb29997f331</uuid>
+                            <name>Interface {#IFNAME} : Bits received</name>
+                            <type>SNMP_AGENT</type>
+                            <snmp_oid>1.3.6.1.2.1.31.1.1.1.6.{#SNMPINDEX}</snmp_oid>
+                            <key>net.if.in[ifHCInOctets.{#SNMPINDEX}]</key>
+                            <history>7d</history>
+                            <trends>0</trends>
+                            <units>bps</units>
+                            <preprocessing>
+                                <step>
+                                    <type>CHANGE_PER_SECOND</type>
+                                    <parameters>
+                                        <parameter/>
+                                    </parameters>
+                                </step>
+                                <step>
+                                    <type>MULTIPLIER</type>
+                                    <parameters>
+                                        <parameter>8</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Network</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>b067d0d9f6cf4212a35849f2d6d6309f</uuid>
+                            <name>Interface {#IFNAME} : Bits sent</name>
+                            <type>SNMP_AGENT</type>
+                            <snmp_oid>1.3.6.1.2.1.31.1.1.1.10.{#SNMPINDEX}</snmp_oid>
+                            <key>net.if.out[ifHCOutOctets.{#SNMPINDEX}]</key>
+                            <history>7d</history>
+                            <trends>0</trends>
+                            <units>bps</units>
+                            <preprocessing>
+                                <step>
+                                    <type>CHANGE_PER_SECOND</type>
+                                    <parameters>
+                                        <parameter/>
+                                    </parameters>
+                                </step>
+                                <step>
+                                    <type>MULTIPLIER</type>
+                                    <parameters>
+                                        <parameter>8</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Network</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>bf8592a3ac8246f7b883b387438c80c2</uuid>
+                            <name>Interface {#IFNAME} : Speed</name>
+                            <type>SNMP_AGENT</type>
+                            <snmp_oid>1.3.6.1.2.1.2.2.1.5.{#SNMPINDEX}</snmp_oid>
+                            <key>net.if.speed[ifHighSpeed.{#SNMPINDEX}]</key>
+                            <delay>10m</delay>
+                            <history>1d</history>
+                            <trends>0</trends>
+                            <units>bps</units>
+                            <preprocessing>
+                                <step>
+                                    <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                                    <parameters>
+                                        <parameter>1h</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Network</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                    </item_prototypes>
+                </discovery_rule>
+            </discovery_rules>
+            <macros>
+                <macro>
+                    <macro>{$LOAD_AVG_PER_CPU.MAX.WARN}</macro>
+                    <value>1.5</value>
+                    <description>This macro is used as a threshold in memory utilization trigger.</description>
+                </macro>
+                <macro>
+                    <macro>{$MEMORY.UTIL.MAX}</macro>
+                    <value>90</value>
+                    <description>This macro is used as a threshold in memory utilization trigger.</description>
+                </macro>
+            </macros>
+        </template>
+    </templates>
+</zabbix_export>
