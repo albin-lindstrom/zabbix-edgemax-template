@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>6.0</version>
-    <date>2023-09-27T12:57:24Z</date>
+    <date>2023-09-27T13:25:29Z</date>
     <groups>
         <group>
             <uuid>36bff6c29af64692839d077febfc7079</uuid>
@@ -349,7 +349,7 @@
                                     <uuid>b3ee11aac54940819c9615d7ced39e33</uuid>
                                     <expression>last(/EdgeMAX SNMPv2/net.if.ip[ipAddrEntry.{#SNMPINDEX}],#1)&lt;&gt;last(/EdgeMAX SNMPv2/net.if.ip[ipAddrEntry.{#SNMPINDEX}],#2) and length(last(/EdgeMAX SNMPv2/net.if.ip[ipAddrEntry.{#SNMPINDEX}]))&gt;0</expression>
                                     <recovery_mode>NONE</recovery_mode>
-                                    <name>EdgeMAX: Interface address has changed</name>
+                                    <name>EdgeMAX: Interface {#IFNAME} address has changed</name>
                                     <event_name>EdgeMAX: Interface {#IFNAME} address on {HOST.HOST} has changed from {FUNCTION.VALUE2} to {FUNCTION.VALUE3}.</event_name>
                                     <opdata>Interface {#IFNAME} address is  {ITEM.LASTVALUE1}</opdata>
                                     <priority>INFO</priority>
@@ -449,7 +449,7 @@
                                     <expression>last(/EdgeMAX SNMPv2/net.if.status[ifOperStatus.{#SNMPINDEX}],#1)&lt;&gt;last(/EdgeMAX SNMPv2/net.if.status[ifOperStatus.{#SNMPINDEX}],#2) and last(/EdgeMAX SNMPv2/net.if.status[ifOperStatus.{#SNMPINDEX}],#2)=1</expression>
                                     <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
                                     <recovery_expression>last(/EdgeMAX SNMPv2/net.if.status[ifOperStatus.{#SNMPINDEX}],#1)=1</recovery_expression>
-                                    <name>EdgeMAX: Interface status has changed</name>
+                                    <name>EdgeMAX: Interface {#IFNAME} status has changed</name>
                                     <event_name>EdgeMAX: Interface {#IFNAME} on {HOST.HOST} status has changed from up (1).</event_name>
                                     <opdata>Interface {#IFNAME} is currently {ITEM.VALUE1}</opdata>
                                     <priority>AVERAGE</priority>
