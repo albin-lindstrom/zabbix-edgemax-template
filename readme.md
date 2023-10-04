@@ -52,7 +52,7 @@ Updated as of 2023-10-01.
 
 ## Issues
 - [Wrong ethernet link status/speed via SNMP](https://community.ui.com/questions/Wrong-ethernet-link-status-speed-via-SNMP/6e50940c-3cc1-4242-9881-5c03e7892ebf)
-  (some of this issue is due to how ubiquiti is treating "standard" SNMP OIDs. The link status should be fixe but the speed is still troublesome)
+  (some of this issue is due to how ubiquiti is treating "standard" SNMP OIDs. The link status should be fixed but the speed is still troublesome)
 
 
 ## License
