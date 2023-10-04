@@ -1,5 +1,3 @@
-![](https://i.imgur.com/N6GqEC1.png)
-
 # Zabbix: EdgeMAX Template (SNMPv2)
 
 This template allows you to quickly get up and running with monitoring of Ubiquiti's EdgeRouter line of devices. It allows for auto-discovering of network interfaces and automatically applies appropriate triggers for the discovered network interfaces.
@@ -14,14 +12,18 @@ This template allows you to quickly get up and running with monitoring of Ubiqui
    1. Set *SNMP community* to the same value as your macro or the other way around.
 
 ## 🏷️ Features
+- ✔️ Monitoring of memory utiliziation of system
+- ✔️ Monitoring of CPU load
 - ✔️ Auto discovering of network interfaces
+- ✔️ Monitoring address per network interface
 - ✔️ Monitoring traffic in/out per network interface
 - ✔️ Monitoring up/down status per network interface
-- ✔️ Monitoring of discarded and error packets per network interface
-- ✔️ Monitoring of memory utiliziation of system
-- 🔶 Linked with **Template Module Generic SNMPv2**
+- ⚠️ Monitoring link speed per network interface (see issues)
+- 🔶 Linked with **Generic by SNMP**
 
 ## Supported models
+This should work with all EdgeRouters. Partial compatibility with Edgeswitches.
+
 Updated as of 2020-04-30.
 - **EdgeRouter**
   - ER-X
@@ -30,6 +32,7 @@ Updated as of 2020-04-30.
 
 ## Issues
 - [Wrong ethernet link status/speed via SNMP](https://community.ui.com/questions/Wrong-ethernet-link-status-speed-via-SNMP/6e50940c-3cc1-4242-9881-5c03e7892ebf)
+  (some of this issue is due to how ubiquiti is treating "standard" SNMP OIDs. The link status should be fixe but the speed is still troublesome)
 
 
 ## License
