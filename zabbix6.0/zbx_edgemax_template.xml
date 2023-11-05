@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
-    <version>6.0</version>
-    <date>2023-09-27T13:25:29Z</date>
-    <groups>
-        <group>
+    <version>6.4</version>
+    <template_groups>
+        <template_group>
+            <uuid>57b7ae836ca64446ba2c296389c009b7</uuid>
+            <name>Templates/Modules</name>
+        </template_group>
+        <template_group>
             <uuid>36bff6c29af64692839d077febfc7079</uuid>
             <name>Templates/Network devices</name>
-        </group>
-    </groups>
+        </template_group>
+    </template_groups>
     <templates>
         <template>
             <uuid>51e0e9a9f0ca49569840767018bb586a</uuid>
@@ -331,7 +334,6 @@
                             <snmp_oid>1.3.6.1.2.1.4.20.1.1[index, 1.3.6.1.2.1.4.20.1.2, {#SNMPINDEX}]</snmp_oid>
                             <key>net.if.ip[ipAddrEntry.{#SNMPINDEX}]</key>
                             <delay>10m</delay>
-                            <history>7d</history>
                             <trends>0</trends>
                             <value_type>TEXT</value_type>
                             <tags>
@@ -445,13 +447,23 @@
                             </tags>
                             <trigger_prototypes>
                                 <trigger_prototype>
+                                    <uuid>f28b60068151468daf04255aca727604</uuid>
+                                    <expression>last(/EdgeMAX SNMPv2/net.if.status[ifOperStatus.{#SNMPINDEX}])&lt;&gt;1</expression>
+                                    <name>EdgeMAX: Interface {#IFNAME} is not up (1).</name>
+                                    <event_name>EdgeMAX: Interface {#IFNAME} on {HOST.HOST} status is not up (1).</event_name>
+                                    <opdata>Interface is currently {ITEM.VALUE1}</opdata>
+                                    <status>DISABLED</status>
+                                    <priority>AVERAGE</priority>
+                                    <description>Interface status is not up (1). Get the interface up again to close the problem automatically.</description>
+                                </trigger_prototype>
+                                <trigger_prototype>
                                     <uuid>ed8cfda8eff44c01a8c18956bb18aef5</uuid>
                                     <expression>last(/EdgeMAX SNMPv2/net.if.status[ifOperStatus.{#SNMPINDEX}],#1)&lt;&gt;last(/EdgeMAX SNMPv2/net.if.status[ifOperStatus.{#SNMPINDEX}],#2) and last(/EdgeMAX SNMPv2/net.if.status[ifOperStatus.{#SNMPINDEX}],#2)=1</expression>
                                     <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
                                     <recovery_expression>last(/EdgeMAX SNMPv2/net.if.status[ifOperStatus.{#SNMPINDEX}],#1)=1</recovery_expression>
                                     <name>EdgeMAX: Interface {#IFNAME} status has changed</name>
                                     <event_name>EdgeMAX: Interface {#IFNAME} on {HOST.HOST} status has changed from up (1).</event_name>
-                                    <opdata>Interface {#IFNAME} is currently {ITEM.VALUE1}</opdata>
+                                    <opdata>Interface is currently {ITEM.VALUE1}</opdata>
                                     <priority>AVERAGE</priority>
                                     <description>Interface status has changed from up (1). Acknowledge to close the problem manually or get the interface up again to close the problem automatically</description>
                                     <manual_close>YES</manual_close>
@@ -507,7 +519,7 @@
                         <page>
                             <widgets>
                                 <widget>
-                                    <type>GRAPH_PROTOTYPE</type>
+                                    <type>graphprototype</type>
                                     <name>EdgeMAX: Network Interfaces</name>
                                     <width>24</width>
                                     <height>12</height>
@@ -518,17 +530,17 @@
                                             <value>3</value>
                                         </field>
                                         <field>
-                                            <type>INTEGER</type>
-                                            <name>rows</name>
-                                            <value>3</value>
-                                        </field>
-                                        <field>
                                             <type>GRAPH_PROTOTYPE</type>
                                             <name>graphid</name>
                                             <value>
                                                 <host>EdgeMAX SNMPv2</host>
                                                 <name>Interface {#IFNAME}: Network traffic</name>
                                             </value>
+                                        </field>
+                                        <field>
+                                            <type>INTEGER</type>
+                                            <name>rows</name>
+                                            <value>3</value>
                                         </field>
                                     </fields>
                                 </widget>
@@ -543,7 +555,42 @@
                         <page>
                             <widgets>
                                 <widget>
-                                    <type>GRAPH_CLASSIC</type>
+                                    <type>item</type>
+                                    <width>8</width>
+                                    <hide_header>YES</hide_header>
+                                    <fields>
+                                        <field>
+                                            <type>INTEGER</type>
+                                            <name>adv_conf</name>
+                                            <value>1</value>
+                                        </field>
+                                        <field>
+                                            <type>ITEM</type>
+                                            <name>itemid</name>
+                                            <value>
+                                                <host>EdgeMAX SNMPv2</host>
+                                                <key>system.name</key>
+                                            </value>
+                                        </field>
+                                        <field>
+                                            <type>INTEGER</type>
+                                            <name>show</name>
+                                            <value>2</value>
+                                        </field>
+                                        <field>
+                                            <type>INTEGER</type>
+                                            <name>units_bold</name>
+                                            <value>0</value>
+                                        </field>
+                                        <field>
+                                            <type>INTEGER</type>
+                                            <name>units_show</name>
+                                            <value>0</value>
+                                        </field>
+                                    </fields>
+                                </widget>
+                                <widget>
+                                    <type>graph</type>
                                     <y>2</y>
                                     <width>12</width>
                                     <height>5</height>
@@ -559,7 +606,81 @@
                                     </fields>
                                 </widget>
                                 <widget>
-                                    <type>GRAPH_CLASSIC</type>
+                                    <type>graph</type>
+                                    <y>7</y>
+                                    <width>24</width>
+                                    <height>5</height>
+                                    <fields>
+                                        <field>
+                                            <type>GRAPH</type>
+                                            <name>graphid</name>
+                                            <value>
+                                                <host>EdgeMAX SNMPv2</host>
+                                                <name>EdgeMAX: System Load</name>
+                                            </value>
+                                        </field>
+                                    </fields>
+                                </widget>
+                                <widget>
+                                    <type>graph</type>
+                                    <y>12</y>
+                                    <width>12</width>
+                                    <height>5</height>
+                                    <fields>
+                                        <field>
+                                            <type>GRAPH</type>
+                                            <name>graphid</name>
+                                            <value>
+                                                <host>EdgeMAX SNMPv2</host>
+                                                <name>Generic by SNMP: Ping time</name>
+                                            </value>
+                                        </field>
+                                    </fields>
+                                </widget>
+                                <widget>
+                                    <type>item</type>
+                                    <name>Uptime (network)</name>
+                                    <x>8</x>
+                                    <width>4</width>
+                                    <fields>
+                                        <field>
+                                            <type>ITEM</type>
+                                            <name>itemid</name>
+                                            <value>
+                                                <host>EdgeMAX SNMPv2</host>
+                                                <key>system.net.uptime[sysUpTime.0]</key>
+                                            </value>
+                                        </field>
+                                        <field>
+                                            <type>INTEGER</type>
+                                            <name>show</name>
+                                            <value>2</value>
+                                        </field>
+                                    </fields>
+                                </widget>
+                                <widget>
+                                    <type>item</type>
+                                    <name>Uptime (hardware)</name>
+                                    <x>12</x>
+                                    <width>4</width>
+                                    <fields>
+                                        <field>
+                                            <type>ITEM</type>
+                                            <name>itemid</name>
+                                            <value>
+                                                <host>EdgeMAX SNMPv2</host>
+                                                <key>system.hw.uptime[hrSystemUptime.0]</key>
+                                            </value>
+                                        </field>
+                                        <field>
+                                            <type>INTEGER</type>
+                                            <name>show</name>
+                                            <value>2</value>
+                                        </field>
+                                    </fields>
+                                </widget>
+                                <widget>
+                                    <type>graph</type>
                                     <x>12</x>
                                     <y>2</y>
                                     <width>12</width>
@@ -576,23 +697,7 @@
                                     </fields>
                                 </widget>
                                 <widget>
-                                    <type>GRAPH_CLASSIC</type>
-                                    <y>7</y>
-                                    <width>24</width>
-                                    <height>5</height>
-                                    <fields>
-                                        <field>
-                                            <type>GRAPH</type>
-                                            <name>graphid</name>
-                                            <value>
-                                                <host>EdgeMAX SNMPv2</host>
-                                                <name>EdgeMAX: System Load</name>
-                                            </value>
-                                        </field>
-                                    </fields>
-                                </widget>
-                                <widget>
-                                    <type>GRAPH_CLASSIC</type>
+                                    <type>graph</type>
                                     <x>12</x>
                                     <y>12</y>
                                     <width>12</width>
@@ -604,99 +709,6 @@
                                             <value>
                                                 <host>EdgeMAX SNMPv2</host>
                                                 <name>Generic by SNMP: Ping lost</name>
-                                            </value>
-                                        </field>
-                                    </fields>
-                                </widget>
-                                <widget>
-                                    <type>GRAPH_CLASSIC</type>
-                                    <y>12</y>
-                                    <width>12</width>
-                                    <height>5</height>
-                                    <fields>
-                                        <field>
-                                            <type>GRAPH</type>
-                                            <name>graphid</name>
-                                            <value>
-                                                <host>EdgeMAX SNMPv2</host>
-                                                <name>Generic by SNMP: Ping time</name>
-                                            </value>
-                                        </field>
-                                    </fields>
-                                </widget>
-                                <widget>
-                                    <type>ITEM</type>
-                                    <width>8</width>
-                                    <hide_header>YES</hide_header>
-                                    <fields>
-                                        <field>
-                                            <type>INTEGER</type>
-                                            <name>show</name>
-                                            <value>2</value>
-                                        </field>
-                                        <field>
-                                            <type>INTEGER</type>
-                                            <name>adv_conf</name>
-                                            <value>1</value>
-                                        </field>
-                                        <field>
-                                            <type>INTEGER</type>
-                                            <name>units_show</name>
-                                            <value>0</value>
-                                        </field>
-                                        <field>
-                                            <type>INTEGER</type>
-                                            <name>units_bold</name>
-                                            <value>0</value>
-                                        </field>
-                                        <field>
-                                            <type>ITEM</type>
-                                            <name>itemid</name>
-                                            <value>
-                                                <host>EdgeMAX SNMPv2</host>
-                                                <key>system.name</key>
-                                            </value>
-                                        </field>
-                                    </fields>
-                                </widget>
-                                <widget>
-                                    <type>ITEM</type>
-                                    <name>Uptime (hardware)</name>
-                                    <x>12</x>
-                                    <width>4</width>
-                                    <fields>
-                                        <field>
-                                            <type>INTEGER</type>
-                                            <name>show</name>
-                                            <value>2</value>
-                                        </field>
-                                        <field>
-                                            <type>ITEM</type>
-                                            <name>itemid</name>
-                                            <value>
-                                                <host>EdgeMAX SNMPv2</host>
-                                                <key>system.hw.uptime[hrSystemUptime.0]</key>
-                                            </value>
-                                        </field>
-                                    </fields>
-                                </widget>
-                                <widget>
-                                    <type>ITEM</type>
-                                    <name>Uptime (network)</name>
-                                    <x>8</x>
-                                    <width>4</width>
-                                    <fields>
-                                        <field>
-                                            <type>INTEGER</type>
-                                            <name>show</name>
-                                            <value>2</value>
-                                        </field>
-                                        <field>
-                                            <type>ITEM</type>
-                                            <name>itemid</name>
-                                            <value>
-                                                <host>EdgeMAX SNMPv2</host>
-                                                <key>system.net.uptime[sysUpTime.0]</key>
                                             </value>
                                         </field>
                                     </fields>
@@ -743,7 +755,511 @@
                 </valuemap>
             </valuemaps>
         </template>
+        <template>
+            <uuid>4cb1aabe2b704b5c882963c2ef87d8f6</uuid>
+            <template>Generic by SNMP</template>
+            <name>Generic by SNMP</name>
+            <description>Template Module Generic
+
+MIBs used:
+HOST-RESOURCES-MIB
+SNMPv2-MIB
+
+Generated by official Zabbix template tool &quot;Templator&quot; 2.0.0</description>
+            <groups>
+                <group>
+                    <name>Templates/Modules</name>
+                </group>
+            </groups>
+            <items>
+                <item>
+                    <uuid>0db3c804c6174c018071e15cbc8c56ae</uuid>
+                    <name>Generic SNMP: ICMP ping</name>
+                    <type>SIMPLE</type>
+                    <key>icmpping</key>
+                    <history>1w</history>
+                    <valuemap>
+                        <name>Service state</name>
+                    </valuemap>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>health</value>
+                        </tag>
+                        <tag>
+                            <tag>component</tag>
+                            <value>network</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>085d6f785f1e46faa447d6921036d01d</uuid>
+                            <expression>max(/Generic by SNMP/icmpping,#3)=0</expression>
+                            <name>Generic SNMP: Unavailable by ICMP ping</name>
+                            <priority>HIGH</priority>
+                            <description>Last three attempts returned timeout.  Please check device connectivity.</description>
+                            <tags>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>availability</value>
+                                </tag>
+                            </tags>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>5d306c51188e496ba19b75b99e28cc7b</uuid>
+                    <name>Generic SNMP: ICMP loss</name>
+                    <type>SIMPLE</type>
+                    <key>icmppingloss</key>
+                    <history>1w</history>
+                    <value_type>FLOAT</value_type>
+                    <units>%</units>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>health</value>
+                        </tag>
+                        <tag>
+                            <tag>component</tag>
+                            <value>network</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>d1bd868814ba4ace9b5034ac4e303259</uuid>
+                            <expression>min(/Generic by SNMP/icmppingloss,5m)&gt;{$ICMP_LOSS_WARN} and min(/Generic by SNMP/icmppingloss,5m)&lt;100</expression>
+                            <name>Generic SNMP: High ICMP ping loss</name>
+                            <opdata>Loss: {ITEM.LASTVALUE1}</opdata>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>Generic SNMP: Unavailable by ICMP ping</name>
+                                    <expression>max(/Generic by SNMP/icmpping,#3)=0</expression>
+                                </dependency>
+                            </dependencies>
+                            <tags>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>availability</value>
+                                </tag>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>performance</value>
+                                </tag>
+                            </tags>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>9ad39c8c6ede46e6953aa6f9466eaf69</uuid>
+                    <name>Generic SNMP: ICMP response time</name>
+                    <type>SIMPLE</type>
+                    <key>icmppingsec</key>
+                    <history>1w</history>
+                    <value_type>FLOAT</value_type>
+                    <units>s</units>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>health</value>
+                        </tag>
+                        <tag>
+                            <tag>component</tag>
+                            <value>network</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>ecd74ec29b484a499414293bf671160b</uuid>
+                            <expression>avg(/Generic by SNMP/icmppingsec,5m)&gt;{$ICMP_RESPONSE_TIME_WARN}</expression>
+                            <name>Generic SNMP: High ICMP ping response time</name>
+                            <opdata>Value: {ITEM.LASTVALUE1}</opdata>
+                            <priority>WARNING</priority>
+                            <dependencies>
+                                <dependency>
+                                    <name>Generic SNMP: High ICMP ping loss</name>
+                                    <expression>min(/Generic by SNMP/icmppingloss,5m)&gt;{$ICMP_LOSS_WARN} and min(/Generic by SNMP/icmppingloss,5m)&lt;100</expression>
+                                </dependency>
+                                <dependency>
+                                    <name>Generic SNMP: Unavailable by ICMP ping</name>
+                                    <expression>max(/Generic by SNMP/icmpping,#3)=0</expression>
+                                </dependency>
+                            </dependencies>
+                            <tags>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>availability</value>
+                                </tag>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>performance</value>
+                                </tag>
+                            </tags>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>2cda26906f254e13985cecdbb7901d1a</uuid>
+                    <name>Generic SNMP: SNMP traps (fallback)</name>
+                    <type>SNMP_TRAP</type>
+                    <key>snmptrap.fallback</key>
+                    <history>2w</history>
+                    <trends>0</trends>
+                    <value_type>LOG</value_type>
+                    <description>The item is used to collect all SNMP traps unmatched by other snmptrap items</description>
+                    <logtimefmt>hh:mm:sszyyyy/MM/dd</logtimefmt>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>network</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>62da59c7aae54df7976f327119fe7cc2</uuid>
+                    <name>Generic SNMP: System contact details</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>1.3.6.1.2.1.1.4.0</snmp_oid>
+                    <key>system.contact[sysContact.0]</key>
+                    <delay>15m</delay>
+                    <history>2w</history>
+                    <trends>0</trends>
+                    <value_type>CHAR</value_type>
+                    <description>MIB: SNMPv2-MIB
+The textual identification of the contact person for this managed node, together with information on how to contact this person.  If no contact information is known, the value is the zero-length string.</description>
+                    <inventory_link>CONTACT</inventory_link>
+                    <preprocessing>
+                        <step>
+                            <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                            <parameters>
+                                <parameter>12h</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>system</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>29a3e5277de94386a5985fcf38a09364</uuid>
+                    <name>Generic SNMP: System description</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>1.3.6.1.2.1.1.1.0</snmp_oid>
+                    <key>system.descr[sysDescr.0]</key>
+                    <delay>15m</delay>
+                    <history>2w</history>
+                    <trends>0</trends>
+                    <value_type>CHAR</value_type>
+                    <description>MIB: SNMPv2-MIB
+A textual description of the entity. This value should
+include the full name and version identification of the system's hardware type, software operating-system, and
+networking software.</description>
+                    <preprocessing>
+                        <step>
+                            <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                            <parameters>
+                                <parameter>12h</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>system</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>b12afb0277494024b1638ce620c4f2d4</uuid>
+                    <name>Generic SNMP: Uptime (hardware)</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>1.3.6.1.2.1.25.1.1.0</snmp_oid>
+                    <key>system.hw.uptime[hrSystemUptime.0]</key>
+                    <delay>30s</delay>
+                    <history>2w</history>
+                    <trends>0</trends>
+                    <units>uptime</units>
+                    <description>MIB: HOST-RESOURCES-MIB
+The amount of time since this host was last initialized. Note that this is different from sysUpTime in the SNMPv2-MIB [RFC1907] because sysUpTime is the uptime of the network management portion of the system.</description>
+                    <preprocessing>
+                        <step>
+                            <type>CHECK_NOT_SUPPORTED</type>
+                            <parameters>
+                                <parameter/>
+                            </parameters>
+                            <error_handler>CUSTOM_VALUE</error_handler>
+                            <error_handler_params>0</error_handler_params>
+                        </step>
+                        <step>
+                            <type>MULTIPLIER</type>
+                            <parameters>
+                                <parameter>0.01</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>system</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>02b453f44c014f2bb1054e801058b381</uuid>
+                    <name>Generic SNMP: System location</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>1.3.6.1.2.1.1.6.0</snmp_oid>
+                    <key>system.location[sysLocation.0]</key>
+                    <delay>15m</delay>
+                    <history>2w</history>
+                    <trends>0</trends>
+                    <value_type>CHAR</value_type>
+                    <description>MIB: SNMPv2-MIB
+The physical location of this node (e.g., `telephone closet, 3rd floor').  If the location is unknown, the value is the zero-length string.</description>
+                    <inventory_link>LOCATION</inventory_link>
+                    <preprocessing>
+                        <step>
+                            <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                            <parameters>
+                                <parameter>12h</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>system</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>3996a3a8d927473aa07c47e63a09b865</uuid>
+                    <name>Generic SNMP: System name</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>1.3.6.1.2.1.1.5.0</snmp_oid>
+                    <key>system.name</key>
+                    <delay>15m</delay>
+                    <history>2w</history>
+                    <trends>0</trends>
+                    <value_type>CHAR</value_type>
+                    <description>MIB: SNMPv2-MIB
+An administratively-assigned name for this managed node.By convention, this is the node's fully-qualified domain name.  If the name is unknown, the value is the zero-length string.</description>
+                    <inventory_link>NAME</inventory_link>
+                    <preprocessing>
+                        <step>
+                            <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                            <parameters>
+                                <parameter>12h</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>system</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>072bf35ea9d04c559ada5cb13d4b6802</uuid>
+                            <expression>last(/Generic by SNMP/system.name,#1)&lt;&gt;last(/Generic by SNMP/system.name,#2) and length(last(/Generic by SNMP/system.name))&gt;0</expression>
+                            <name>Generic SNMP: System name has changed</name>
+                            <event_name>Generic SNMP: System name has changed (new name: {ITEM.VALUE})</event_name>
+                            <priority>INFO</priority>
+                            <description>The name of the system has changed. Acknowledge to close the problem manually.</description>
+                            <manual_close>YES</manual_close>
+                            <tags>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>notice</value>
+                                </tag>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>security</value>
+                                </tag>
+                            </tags>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>000b97abddcd44bfb57e0eeb1b77f69e</uuid>
+                    <name>Generic SNMP: Uptime (network)</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>1.3.6.1.2.1.1.3.0</snmp_oid>
+                    <key>system.net.uptime[sysUpTime.0]</key>
+                    <delay>30s</delay>
+                    <history>2w</history>
+                    <trends>0</trends>
+                    <units>uptime</units>
+                    <description>MIB: SNMPv2-MIB
+The time (in hundredths of a second) since the network management portion of the system was last re-initialized.</description>
+                    <preprocessing>
+                        <step>
+                            <type>MULTIPLIER</type>
+                            <parameters>
+                                <parameter>0.01</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>system</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>9dbcc5a1cd7240c896e2ea718f9ccb35</uuid>
+                    <name>Generic SNMP: System object ID</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>1.3.6.1.2.1.1.2.0</snmp_oid>
+                    <key>system.objectid[sysObjectID.0]</key>
+                    <delay>15m</delay>
+                    <history>2w</history>
+                    <trends>0</trends>
+                    <value_type>CHAR</value_type>
+                    <description>MIB: SNMPv2-MIB
+The vendor's authoritative identification of the network management subsystem contained in the entity.  This value is allocated within the SMI enterprises subtree (1.3.6.1.4.1) and provides an easy and unambiguous means for determining`what kind of box' is being managed.  For example, if vendor`Flintstones, Inc.' was assigned the subtree1.3.6.1.4.1.4242, it could assign the identifier 1.3.6.1.4.1.4242.1.1 to its `Fred Router'.</description>
+                    <preprocessing>
+                        <step>
+                            <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                            <parameters>
+                                <parameter>12h</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>system</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>3e8c2d440441416b9ccec7dd90e21503</uuid>
+                    <name>Generic SNMP: SNMP agent availability</name>
+                    <type>INTERNAL</type>
+                    <key>zabbix[host,snmp,available]</key>
+                    <history>7d</history>
+                    <description>Availability of SNMP checks on the host. The value of this item corresponds to availability icons in the host list.
+Possible value:
+0 - not available
+1 - available
+2 - unknown</description>
+                    <valuemap>
+                        <name>zabbix.host.available</name>
+                    </valuemap>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>health</value>
+                        </tag>
+                        <tag>
+                            <tag>component</tag>
+                            <value>network</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>d3aba975ec574b258c7f971152c5d4cd</uuid>
+                            <expression>max(/Generic by SNMP/zabbix[host,snmp,available],{$SNMP.TIMEOUT})=0</expression>
+                            <name>Generic SNMP: No SNMP data collection</name>
+                            <opdata>Current state: {ITEM.LASTVALUE1}</opdata>
+                            <priority>WARNING</priority>
+                            <description>SNMP is not available for polling. Please check device connectivity and SNMP settings.</description>
+                            <dependencies>
+                                <dependency>
+                                    <name>Generic SNMP: Unavailable by ICMP ping</name>
+                                    <expression>max(/Generic by SNMP/icmpping,#3)=0</expression>
+                                </dependency>
+                            </dependencies>
+                            <tags>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>availability</value>
+                                </tag>
+                            </tags>
+                        </trigger>
+                    </triggers>
+                </item>
+            </items>
+            <macros>
+                <macro>
+                    <macro>{$ICMP_LOSS_WARN}</macro>
+                    <value>5</value>
+                </macro>
+                <macro>
+                    <macro>{$ICMP_RESPONSE_TIME_WARN}</macro>
+                    <value>0.15</value>
+                </macro>
+                <macro>
+                    <macro>{$SNMP.TIMEOUT}</macro>
+                    <value>5m</value>
+                </macro>
+            </macros>
+            <valuemaps>
+                <valuemap>
+                    <uuid>1817725a41454fd3b9ad22feaf889fc5</uuid>
+                    <name>Service state</name>
+                    <mappings>
+                        <mapping>
+                            <value>0</value>
+                            <newvalue>Down</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>1</value>
+                            <newvalue>Up</newvalue>
+                        </mapping>
+                    </mappings>
+                </valuemap>
+                <valuemap>
+                    <uuid>ced60845a741400390ba002e69e26b0f</uuid>
+                    <name>zabbix.host.available</name>
+                    <mappings>
+                        <mapping>
+                            <value>0</value>
+                            <newvalue>not available</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>1</value>
+                            <newvalue>available</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>2</value>
+                            <newvalue>unknown</newvalue>
+                        </mapping>
+                    </mappings>
+                </valuemap>
+            </valuemaps>
+        </template>
     </templates>
+    <triggers>
+        <trigger>
+            <uuid>6f00359af55f45909bdecbad234c7654</uuid>
+            <expression>(last(/Generic by SNMP/system.hw.uptime[hrSystemUptime.0])&gt;0 and last(/Generic by SNMP/system.hw.uptime[hrSystemUptime.0])&lt;10m) or (last(/Generic by SNMP/system.hw.uptime[hrSystemUptime.0])=0 and last(/Generic by SNMP/system.net.uptime[sysUpTime.0])&lt;10m)</expression>
+            <name>Generic SNMP: Host has been restarted</name>
+            <event_name>Generic SNMP: {HOST.NAME} has been restarted (uptime &lt; 10m)</event_name>
+            <priority>WARNING</priority>
+            <description>Uptime is less than 10 minutes.</description>
+            <manual_close>YES</manual_close>
+            <dependencies>
+                <dependency>
+                    <name>Generic SNMP: No SNMP data collection</name>
+                    <expression>max(/Generic by SNMP/zabbix[host,snmp,available],{$SNMP.TIMEOUT})=0</expression>
+                </dependency>
+            </dependencies>
+            <tags>
+                <tag>
+                    <tag>scope</tag>
+                    <value>notice</value>
+                </tag>
+            </tags>
+        </trigger>
+    </triggers>
     <graphs>
         <graph>
             <uuid>66415b709399470bb181f7c604f7b00a</uuid>
@@ -826,6 +1342,36 @@
                     <item>
                         <host>EdgeMAX SNMPv2</host>
                         <key>Load15Minute</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+        <graph>
+            <uuid>307cfed25c3f4187a8aa152d393d2c29</uuid>
+            <name>Generic by SNMP: Ping lost</name>
+            <ymin_type_1>FIXED</ymin_type_1>
+            <graph_items>
+                <graph_item>
+                    <color>199C0D</color>
+                    <calc_fnc>ALL</calc_fnc>
+                    <item>
+                        <host>Generic by SNMP</host>
+                        <key>icmppingloss</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+        <graph>
+            <uuid>4a74e5ea505a43bea4b56a34e9f80926</uuid>
+            <name>Generic by SNMP: Ping time</name>
+            <ymin_type_1>FIXED</ymin_type_1>
+            <graph_items>
+                <graph_item>
+                    <color>199C0D</color>
+                    <calc_fnc>ALL</calc_fnc>
+                    <item>
+                        <host>Generic by SNMP</host>
+                        <key>icmppingsec</key>
                     </item>
                 </graph_item>
             </graph_items>
