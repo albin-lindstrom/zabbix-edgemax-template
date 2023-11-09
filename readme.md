@@ -42,11 +42,12 @@ From this template:
 ## Supported models
 This should work with all EdgeRouters. Partial compatibility with Edgeswitches.
 
-Updated as of 2023-11-01.
+Updated as of 2023-11-08.
 - **EdgeRouter**
   - ER-X
   - ER-5 ( + poe)
   - ER-6 ( + poe)
+  - ER-12P ([Reported by andymarden](https://github.com/albin-lindstrom/zabbix-edgemax-template/pull/16#issuecomment-1801248424))
 
 - **EdgeSwitch**
   - ES-10XP
