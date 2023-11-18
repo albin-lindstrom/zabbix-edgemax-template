@@ -45,9 +45,11 @@ This should work with all EdgeRouters. Partial compatibility with Edgeswitches.
 Updated as of 2023-11-08.
 - **EdgeRouter**
   - ER-X
+  - ER-4 ([Reported by notfixingit3](https://github.com/albin-lindstrom/zabbix-edgemax-template/pull/16#issuecomment-1817275261))
   - ER-5 ( + poe)
   - ER-6 ( + poe)
   - ER-12P ([Reported by andymarden](https://github.com/albin-lindstrom/zabbix-edgemax-template/pull/16#issuecomment-1801248424))
+  - ER-Pro ([Reported by notfixingit3](https://github.com/albin-lindstrom/zabbix-edgemax-template/pull/16#issuecomment-1817275261))
 
 - **EdgeSwitch**
   - ES-10XP
