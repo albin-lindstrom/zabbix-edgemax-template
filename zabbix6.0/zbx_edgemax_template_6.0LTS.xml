@@ -1,0 +1,638 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>6.0</version>
+    <date>2023-12-03T19:34:58Z</date>
+    <groups>
+        <group>
+            <uuid>36bff6c29af64692839d077febfc7079</uuid>
+            <name>Templates/Network devices</name>
+        </group>
+    </groups>
+    <templates>
+        <template>
+            <uuid>51e0e9a9f0ca49569840767018bb586a</uuid>
+            <template>EdgeMAX SNMPv2</template>
+            <name>EdgeMAX SNMPv2</name>
+            <templates>
+                <template>
+                    <name>Generic by SNMP</name>
+                </template>
+            </templates>
+            <groups>
+                <group>
+                    <name>Templates/Network devices</name>
+                </group>
+            </groups>
+            <items>
+                <item>
+                    <uuid>62c2558cc3b24573bb425869bd680ae0</uuid>
+                    <name>EdgeMAX: Load average last 1 minute</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>1.3.6.1.4.1.2021.10.1.3.1</snmp_oid>
+                    <key>Load1Minute</key>
+                    <history>1d</history>
+                    <value_type>FLOAT</value_type>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>load</value>
+                        </tag>
+                        <tag>
+                            <tag>component</tag>
+                            <value>system</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>229564ad1b274f4887812a3af0ffafc6</uuid>
+                            <expression>last(/EdgeMAX SNMPv2/Load1Minute)&gt;{$LOAD_AVG_PER_CPU.MAX.WARN}</expression>
+                            <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                            <recovery_expression>last(/EdgeMAX SNMPv2/Load1Minute)&lt;{$LOAD_AVG_PER_CPU.MAX.WARN}</recovery_expression>
+                            <name>EdgeMAX: Load average is too high (per CPU load over {$LOAD_AVG_PER_CPU.MAX.WARN} for 1m)</name>
+                            <opdata>Load averages(1m): {ITEM.LASTVALUE1}</opdata>
+                            <priority>AVERAGE</priority>
+                            <description>Per CPU load average is too high. Your system may be slow to respond.</description>
+                            <tags>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>performance</value>
+                                </tag>
+                            </tags>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>268fe8c15d99415dafd32fec95ebb9f0</uuid>
+                    <name>EdgeMAX: Load average last 5 minute</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>1.3.6.1.4.1.2021.10.1.3.2</snmp_oid>
+                    <key>Load5Minute</key>
+                    <history>1d</history>
+                    <value_type>FLOAT</value_type>
+                    <description>5 minute Load</description>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>load</value>
+                        </tag>
+                        <tag>
+                            <tag>component</tag>
+                            <value>system</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>effdbb0807574ffa80fa9ee2deaf9685</uuid>
+                    <name>EdgeMAX: Load average last 15 minutes</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>1.3.6.1.4.1.2021.10.1.3.3</snmp_oid>
+                    <key>Load15Minute</key>
+                    <history>1d</history>
+                    <value_type>FLOAT</value_type>
+                    <description>15 minute Load</description>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>load</value>
+                        </tag>
+                        <tag>
+                            <tag>component</tag>
+                            <value>system</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>55d17189b0894e5bb5aed103ca860527</uuid>
+                    <name>EdgeMAX: Total amount of available memory</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>1.3.6.1.4.1.2021.4.6.0</snmp_oid>
+                    <key>MemAvailable</key>
+                    <history>7d</history>
+                    <trends>0</trends>
+                    <units>b</units>
+                    <preprocessing>
+                        <step>
+                            <type>MULTIPLIER</type>
+                            <parameters>
+                                <parameter>1000</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>memory</value>
+                        </tag>
+                        <tag>
+                            <tag>component</tag>
+                            <value>system</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>8a61a3d93e194ee7a44420db20b37de6</uuid>
+                    <name>EdgeMAX: Total amount of buffers</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>1.3.6.1.4.1.2021.4.14.0</snmp_oid>
+                    <key>MemBuffers</key>
+                    <history>7d</history>
+                    <trends>0</trends>
+                    <units>b</units>
+                    <preprocessing>
+                        <step>
+                            <type>MULTIPLIER</type>
+                            <parameters>
+                                <parameter>1000</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>memory</value>
+                        </tag>
+                        <tag>
+                            <tag>component</tag>
+                            <value>system</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>c858f465d2bb4651a23bcfa86596c371</uuid>
+                    <name>EdgeMAX: Total amount of cached</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>1.3.6.1.4.1.2021.4.15.0</snmp_oid>
+                    <key>MemCached</key>
+                    <history>7d</history>
+                    <trends>0</trends>
+                    <units>b</units>
+                    <preprocessing>
+                        <step>
+                            <type>MULTIPLIER</type>
+                            <parameters>
+                                <parameter>1000</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>memory</value>
+                        </tag>
+                        <tag>
+                            <tag>component</tag>
+                            <value>system</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>ba758bc30b3a47f69f834e6815589a2d</uuid>
+                    <name>EdgeMAX: Total amount of memory</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>1.3.6.1.4.1.2021.4.5.0</snmp_oid>
+                    <key>MemTotal</key>
+                    <history>7d</history>
+                    <trends>0</trends>
+                    <units>b</units>
+                    <preprocessing>
+                        <step>
+                            <type>MULTIPLIER</type>
+                            <parameters>
+                                <parameter>1000</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>memory</value>
+                        </tag>
+                        <tag>
+                            <tag>component</tag>
+                            <value>system</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>b3f2f99e384a492d8d838c007a9f1081</uuid>
+                    <name>EdgeMAX: Used memory</name>
+                    <type>CALCULATED</type>
+                    <key>MemUsed</key>
+                    <history>7d</history>
+                    <trends>0</trends>
+                    <units>b</units>
+                    <params>last(//MemTotal)-last(//MemAvailable)</params>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>memory</value>
+                        </tag>
+                        <tag>
+                            <tag>component</tag>
+                            <value>system</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>74e161402bc1440e8d30a413c7a0968e</uuid>
+                    <name>EdgeMAX: Memory utizilation</name>
+                    <type>CALCULATED</type>
+                    <key>MemUtil</key>
+                    <history>7d</history>
+                    <trends>0</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>%</units>
+                    <params>(last(//MemUsed)-last(//MemBuffers)-last(//MemCached))/last(//MemTotal)*100</params>
+                    <preprocessing>
+                        <step>
+                            <type>JAVASCRIPT</type>
+                            <parameters>
+                                <parameter>return Math.floor(value)</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>component</tag>
+                            <value>memory</value>
+                        </tag>
+                        <tag>
+                            <tag>component</tag>
+                            <value>system</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>a30deff68b824ca2b8cd81ae889cdf2f</uuid>
+                            <expression>min(/EdgeMAX SNMPv2/MemUtil,5m)&gt;{$MEMORY.UTIL.MAX}</expression>
+                            <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                            <recovery_expression>max(/EdgeMAX SNMPv2/MemUtil,5m)&lt;{$MEMORY.UTIL.MAX}</recovery_expression>
+                            <name>EdgeMAX: High memory utilization ( &gt;{$MEMORY.UTIL.MAX}% for 5m)</name>
+                            <opdata>Memory utilization: {ITEM.LASTVALUE1}</opdata>
+                            <priority>WARNING</priority>
+                            <description>The system is running out of free memory.</description>
+                            <tags>
+                                <tag>
+                                    <tag>scope</tag>
+                                    <value>performance</value>
+                                </tag>
+                            </tags>
+                        </trigger>
+                    </triggers>
+                </item>
+            </items>
+            <discovery_rules>
+                <discovery_rule>
+                    <uuid>36f64bd4b35d41d9a8fde299df72ca9a</uuid>
+                    <name>Network interfaces discovery</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>discovery[{#IFOPERSTATUS},1.3.6.1.2.1.2.2.1.8,{#IFNAME},1.3.6.1.2.1.31.1.1.1.1]</snmp_oid>
+                    <key>NetworkInterface</key>
+                    <delay>1d</delay>
+                    <item_prototypes>
+                        <item_prototype>
+                            <uuid>a922c4529f82490287f0cbb29997f331</uuid>
+                            <name>Interface {#IFNAME} : Bits received</name>
+                            <type>SNMP_AGENT</type>
+                            <snmp_oid>1.3.6.1.2.1.31.1.1.1.6.{#SNMPINDEX}</snmp_oid>
+                            <key>net.if.in[ifHCInOctets.{#SNMPINDEX}]</key>
+                            <history>7d</history>
+                            <trends>0</trends>
+                            <units>bps</units>
+                            <preprocessing>
+                                <step>
+                                    <type>CHANGE_PER_SECOND</type>
+                                    <parameters>
+                                        <parameter/>
+                                    </parameters>
+                                </step>
+                                <step>
+                                    <type>MULTIPLIER</type>
+                                    <parameters>
+                                        <parameter>8</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Interface Speed</value>
+                                </tag>
+                                <tag>
+                                    <tag>component</tag>
+                                    <value>network</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>c01af9e30682460fa97177bc067f7327</uuid>
+                            <name>Interface {#IFNAME} : Address</name>
+                            <type>SNMP_AGENT</type>
+                            <snmp_oid>1.3.6.1.2.1.4.20.1.1[index, 1.3.6.1.2.1.4.20.1.2, {#SNMPINDEX}]</snmp_oid>
+                            <key>net.if.ip[ipAddrEntry.{#SNMPINDEX}]</key>
+                            <delay>10m</delay>
+                            <trends>0</trends>
+                            <value_type>TEXT</value_type>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>interface ip address</value>
+                                </tag>
+                                <tag>
+                                    <tag>component</tag>
+                                    <value>network</value>
+                                </tag>
+                            </tags>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>b3ee11aac54940819c9615d7ced39e33</uuid>
+                                    <expression>last(/EdgeMAX SNMPv2/net.if.ip[ipAddrEntry.{#SNMPINDEX}],#1)&lt;&gt;last(/EdgeMAX SNMPv2/net.if.ip[ipAddrEntry.{#SNMPINDEX}],#2) and length(last(/EdgeMAX SNMPv2/net.if.ip[ipAddrEntry.{#SNMPINDEX}]))&gt;0</expression>
+                                    <recovery_mode>NONE</recovery_mode>
+                                    <name>EdgeMAX: Interface {#IFNAME} address has changed</name>
+                                    <event_name>EdgeMAX: Interface {#IFNAME} address on {HOST.HOST} has changed from {FUNCTION.VALUE2} to {FUNCTION.VALUE3}.</event_name>
+                                    <opdata>Interface {#IFNAME} address is  {ITEM.LASTVALUE1}</opdata>
+                                    <priority>INFO</priority>
+                                    <description>The interface address has changed. Acknowledge to close the problem manually.</description>
+                                    <type>MULTIPLE</type>
+                                    <manual_close>YES</manual_close>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>b067d0d9f6cf4212a35849f2d6d6309f</uuid>
+                            <name>Interface {#IFNAME} : Bits sent</name>
+                            <type>SNMP_AGENT</type>
+                            <snmp_oid>1.3.6.1.2.1.31.1.1.1.10.{#SNMPINDEX}</snmp_oid>
+                            <key>net.if.out[ifHCOutOctets.{#SNMPINDEX}]</key>
+                            <history>7d</history>
+                            <trends>0</trends>
+                            <units>bps</units>
+                            <preprocessing>
+                                <step>
+                                    <type>CHANGE_PER_SECOND</type>
+                                    <parameters>
+                                        <parameter/>
+                                    </parameters>
+                                </step>
+                                <step>
+                                    <type>MULTIPLIER</type>
+                                    <parameters>
+                                        <parameter>8</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Interface Speed</value>
+                                </tag>
+                                <tag>
+                                    <tag>component</tag>
+                                    <value>network</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>bf8592a3ac8246f7b883b387438c80c2</uuid>
+                            <name>Interface {#IFNAME} : Speed</name>
+                            <type>SNMP_AGENT</type>
+                            <snmp_oid>1.3.6.1.2.1.2.2.1.5.{#SNMPINDEX}</snmp_oid>
+                            <key>net.if.speed[ifHighSpeed.{#SNMPINDEX}]</key>
+                            <delay>10m</delay>
+                            <history>1d</history>
+                            <trends>0</trends>
+                            <units>bps</units>
+                            <preprocessing>
+                                <step>
+                                    <type>DISCARD_UNCHANGED_HEARTBEAT</type>
+                                    <parameters>
+                                        <parameter>1h</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Interface Speed</value>
+                                </tag>
+                                <tag>
+                                    <tag>component</tag>
+                                    <value>network</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>650af0d82a9f495db7b174940d56a873</uuid>
+                            <name>Interface {#IFNAME} : Status</name>
+                            <type>SNMP_AGENT</type>
+                            <snmp_oid>1.3.6.1.2.1.2.2.1.8.{#SNMPINDEX}</snmp_oid>
+                            <key>net.if.status[ifOperStatus.{#SNMPINDEX}]</key>
+                            <history>7d</history>
+                            <trends>0</trends>
+                            <valuemap>
+                                <name>ifOperStatus</name>
+                            </valuemap>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>interface status</value>
+                                </tag>
+                                <tag>
+                                    <tag>component</tag>
+                                    <value>network</value>
+                                </tag>
+                            </tags>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>ed8cfda8eff44c01a8c18956bb18aef5</uuid>
+                                    <expression>last(/EdgeMAX SNMPv2/net.if.status[ifOperStatus.{#SNMPINDEX}])&lt;&gt;1</expression>
+                                    <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                                    <recovery_expression>last(/EdgeMAX SNMPv2/net.if.status[ifOperStatus.{#SNMPINDEX}],#1)=1</recovery_expression>
+                                    <name>EdgeMAX: Interface {#IFNAME} is not up (1).</name>
+                                    <event_name>EdgeMAX: Interface {#IFNAME} on {HOST.HOST} status is not up (1).</event_name>
+                                    <opdata>Interface is currently {ITEM.VALUE1}</opdata>
+                                    <status>DISABLED</status>
+                                    <priority>AVERAGE</priority>
+                                    <description>Interface status is not up (1). Get the interface up again to close the problem automatically.</description>
+                                    <manual_close>YES</manual_close>
+                                </trigger_prototype>
+                                <trigger_prototype>
+                                    <uuid>1851712d892e413496bad59dc1eca0f4</uuid>
+                                    <expression>last(/EdgeMAX SNMPv2/net.if.status[ifOperStatus.{#SNMPINDEX}],#1)&lt;&gt;last(/EdgeMAX SNMPv2/net.if.status[ifOperStatus.{#SNMPINDEX}],#2) and last(/EdgeMAX SNMPv2/net.if.status[ifOperStatus.{#SNMPINDEX}],#2)=1</expression>
+                                    <recovery_mode>RECOVERY_EXPRESSION</recovery_mode>
+                                    <recovery_expression>last(/EdgeMAX SNMPv2/net.if.status[ifOperStatus.{#SNMPINDEX}],#1)=1</recovery_expression>
+                                    <name>EdgeMAX: Interface {#IFNAME} status has changed</name>
+                                    <event_name>EdgeMAX: Interface {#IFNAME} on {HOST.HOST} status has changed from up (1).</event_name>
+                                    <opdata>Interface is currently {ITEM.VALUE1}</opdata>
+                                    <priority>AVERAGE</priority>
+                                    <description>Interface status has changed from up (1). Acknowledge to close the problem manually or get the interface up again to close the problem automatically</description>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                    </item_prototypes>
+                    <graph_prototypes>
+                        <graph_prototype>
+                            <uuid>50b02b31a5c849ed8a469cbc1f74bb1f</uuid>
+                            <name>Interface {#IFNAME}: Network traffic</name>
+                            <ymin_type_1>FIXED</ymin_type_1>
+                            <graph_items>
+                                <graph_item>
+                                    <color>F63100</color>
+                                    <calc_fnc>ALL</calc_fnc>
+                                    <item>
+                                        <host>EdgeMAX SNMPv2</host>
+                                        <key>net.if.in[ifHCInOctets.{#SNMPINDEX}]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>1</sortorder>
+                                    <color>199C0D</color>
+                                    <calc_fnc>ALL</calc_fnc>
+                                    <item>
+                                        <host>EdgeMAX SNMPv2</host>
+                                        <key>net.if.out[ifHCOutOctets.{#SNMPINDEX}]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                    </graph_prototypes>
+                </discovery_rule>
+            </discovery_rules>
+            <macros>
+                <macro>
+                    <macro>{$LOAD_AVG_PER_CPU.MAX.WARN}</macro>
+                    <value>1.5</value>
+                    <description>This macro is used as a threshold in memory utilization trigger.</description>
+                </macro>
+                <macro>
+                    <macro>{$MEMORY.UTIL.MAX}</macro>
+                    <value>90</value>
+                    <description>This macro is used as a threshold in memory utilization trigger.</description>
+                </macro>
+            </macros>
+            <valuemaps>
+                <valuemap>
+                    <uuid>5040d26951114decbb582ae0589c463a</uuid>
+                    <name>ifOperStatus</name>
+                    <mappings>
+                        <mapping>
+                            <value>1</value>
+                            <newvalue>up</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>2</value>
+                            <newvalue>down</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>3</value>
+                            <newvalue>testing</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>4</value>
+                            <newvalue>unknown</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>5</value>
+                            <newvalue>dormant</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>6</value>
+                            <newvalue>notPresent</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>7</value>
+                            <newvalue>lowerLayerDow</newvalue>
+                        </mapping>
+                    </mappings>
+                </valuemap>
+            </valuemaps>
+        </template>
+    </templates>
+    <graphs>
+        <graph>
+            <uuid>66415b709399470bb181f7c604f7b00a</uuid>
+            <name>EdgeMAX:  Memory usage</name>
+            <height>500</height>
+            <show_work_period>NO</show_work_period>
+            <show_triggers>NO</show_triggers>
+            <type>STACKED</type>
+            <graph_items>
+                <graph_item>
+                    <color>F63100</color>
+                    <calc_fnc>MIN</calc_fnc>
+                    <item>
+                        <host>EdgeMAX SNMPv2</host>
+                        <key>MemBuffers</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>1</sortorder>
+                    <color>2774A4</color>
+                    <calc_fnc>MIN</calc_fnc>
+                    <item>
+                        <host>EdgeMAX SNMPv2</host>
+                        <key>MemCached</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>2</sortorder>
+                    <color>199C0D</color>
+                    <calc_fnc>MIN</calc_fnc>
+                    <item>
+                        <host>EdgeMAX SNMPv2</host>
+                        <key>MemAvailable</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+        <graph>
+            <uuid>f260a63bc3b04c3b80b47f83bb05ed9c</uuid>
+            <name>EdgeMAX: Memory Used</name>
+            <percent_right>50</percent_right>
+            <ymin_type_1>FIXED</ymin_type_1>
+            <graph_items>
+                <graph_item>
+                    <color>199C0D</color>
+                    <calc_fnc>ALL</calc_fnc>
+                    <item>
+                        <host>EdgeMAX SNMPv2</host>
+                        <key>MemUtil</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+        <graph>
+            <uuid>f6837489bd7246fcb6296b62a604b6a1</uuid>
+            <name>EdgeMAX: System Load</name>
+            <ymin_type_1>FIXED</ymin_type_1>
+            <graph_items>
+                <graph_item>
+                    <color>199C0D</color>
+                    <calc_fnc>ALL</calc_fnc>
+                    <item>
+                        <host>EdgeMAX SNMPv2</host>
+                        <key>Load1Minute</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>1</sortorder>
+                    <color>F63100</color>
+                    <calc_fnc>ALL</calc_fnc>
+                    <item>
+                        <host>EdgeMAX SNMPv2</host>
+                        <key>Load5Minute</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>2</sortorder>
+                    <color>2774A4</color>
+                    <calc_fnc>ALL</calc_fnc>
+                    <item>
+                        <host>EdgeMAX SNMPv2</host>
+                        <key>Load15Minute</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+    </graphs>
+</zabbix_export>
