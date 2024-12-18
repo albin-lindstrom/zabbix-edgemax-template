@@ -177,6 +177,7 @@ zabbix_export:
           name: 'CPU utilization'
           type: CALCULATED
           key: system.cpu.util
+          history: 7d
           value_type: FLOAT
           params: 'avg(//sys.cpu_load[*],1m)'
         - uuid: 0452cf98dc254c81b8a71784599a7515
@@ -201,6 +202,7 @@ zabbix_export:
               type: SNMP_AGENT
               snmp_oid: '1.3.6.1.2.1.25.3.3.1.2.{#DEV_ID}'
               key: 'sys.cpu_load[{#CPU_COUNTER}]'
+              history: 7d
           master_item:
             key: system.hr.devices.walk
           preprocessing:
