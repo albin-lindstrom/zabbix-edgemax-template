@@ -179,7 +179,7 @@ zabbix_export:
           key: system.cpu.util
           history: 7d
           value_type: FLOAT
-          params: 'avg(//sys.cpu_load[*],1m)'
+          params: 'avg(last_foreach(//sys.cpu_load[*],1m))'
         - uuid: 0452cf98dc254c81b8a71784599a7515
           name: 'EdgeMAX: CPU Discovery Master SNMP Item'
           type: SNMP_AGENT
