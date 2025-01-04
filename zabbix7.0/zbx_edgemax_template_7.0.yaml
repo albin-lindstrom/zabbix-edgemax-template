@@ -203,6 +203,7 @@ zabbix_export:
               snmp_oid: '1.3.6.1.2.1.25.3.3.1.2.{#DEV_ID}'
               key: 'sys.cpu_load[{#CPU_COUNTER}]'
               history: 7d
+              units: '%'
           master_item:
             key: system.hr.devices.walk
           preprocessing:
@@ -419,16 +420,13 @@ zabbix_export:
                   width: '24'
                   hide_header: 'YES'
                   fields:
-                    - type: INTEGER
-                      name: adv_conf
-                      value: '1'
                     - type: ITEM
-                      name: itemid
+                      name: itemid.0
                       value:
                         host: 'EdgeMAX SNMPv2'
                         key: system.name
                     - type: INTEGER
-                      name: show
+                      name: show.0
                       value: '2'
                     - type: INTEGER
                       name: units_bold
@@ -438,11 +436,24 @@ zabbix_export:
                       value: '0'
                 - type: graph
                   'y': '2'
+                  width: '72'
+                  height: '5'
+                  fields:
+                    - type: GRAPH
+                      name: graphid.0
+                      value:
+                        host: 'EdgeMAX SNMPv2'
+                        name: 'EdgeMAX: CPU Load'
+                    - type: STRING
+                      name: reference
+                      value: DFDWE
+                - type: graph
+                  'y': '7'
                   width: '36'
                   height: '5'
                   fields:
                     - type: GRAPH
-                      name: graphid
+                      name: graphid.0
                       value:
                         host: 'EdgeMAX SNMPv2'
                         name: 'EdgeMAX:  Memory usage'
@@ -450,25 +461,25 @@ zabbix_export:
                       name: reference
                       value: AAAAA
                 - type: graph
-                  'y': '7'
+                  'y': '12'
                   width: '72'
                   height: '5'
                   fields:
                     - type: GRAPH
-                      name: graphid
+                      name: graphid.0
                       value:
                         host: 'EdgeMAX SNMPv2'
                         name: 'EdgeMAX: System Load'
                     - type: STRING
                       name: reference
-                      value: AAAAB
+                      value: FFKHC
                 - type: graph
-                  'y': '12'
+                  'y': '17'
                   width: '36'
                   height: '5'
                   fields:
                     - type: GRAPH
-                      name: graphid
+                      name: graphid.0
                       value:
                         host: 'EdgeMAX SNMPv2'
                         name: 'Generic by SNMP: Ping time'
@@ -481,12 +492,12 @@ zabbix_export:
                   width: '12'
                   fields:
                     - type: ITEM
-                      name: itemid
+                      name: itemid.0
                       value:
                         host: 'EdgeMAX SNMPv2'
                         key: 'system.net.uptime[sysUpTime.0]'
                     - type: INTEGER
-                      name: show
+                      name: show.0
                       value: '2'
                 - type: item
                   name: 'Uptime (hardware)'
@@ -494,21 +505,21 @@ zabbix_export:
                   width: '12'
                   fields:
                     - type: ITEM
-                      name: itemid
+                      name: itemid.0
                       value:
                         host: 'EdgeMAX SNMPv2'
                         key: 'system.hw.uptime[hrSystemUptime.0]'
                     - type: INTEGER
-                      name: show
+                      name: show.0
                       value: '2'
                 - type: graph
                   x: '36'
-                  'y': '2'
+                  'y': '7'
                   width: '36'
                   height: '5'
                   fields:
                     - type: GRAPH
-                      name: graphid
+                      name: graphid.0
                       value:
                         host: 'EdgeMAX SNMPv2'
                         name: 'EdgeMAX: Memory Used'
@@ -517,12 +528,12 @@ zabbix_export:
                       value: AAAAD
                 - type: graph
                   x: '36'
-                  'y': '12'
+                  'y': '17'
                   width: '36'
                   height: '5'
                   fields:
                     - type: GRAPH
-                      name: graphid
+                      name: graphid.0
                       value:
                         host: 'EdgeMAX SNMPv2'
                         name: 'Generic by SNMP: Ping lost'
@@ -548,6 +559,15 @@ zabbix_export:
             - value: '7'
               newvalue: lowerLayerDow
   graphs:
+    - uuid: 7445893be4c448ceae6c01ccc251aef0
+      name: 'EdgeMAX: CPU Load'
+      ymin_type_1: FIXED
+      graph_items:
+        - color: 199C0D
+          calc_fnc: ALL
+          item:
+            host: 'EdgeMAX SNMPv2'
+            key: system.cpu.util
     - uuid: 66415b709399470bb181f7c604f7b00a
       name: 'EdgeMAX:  Memory usage'
       height: '500'
