@@ -1,0 +1,625 @@
+zabbix_export:
+  version: '7.0'
+  template_groups:
+    - uuid: 36bff6c29af64692839d077febfc7079
+      name: 'Templates/Network devices'
+  templates:
+    - uuid: 51e0e9a9f0ca49569840767018bb586a
+      template: 'EdgeMAX SNMPv2'
+      name: 'EdgeMAX SNMPv2'
+      templates:
+        - name: 'Generic by SNMP'
+      groups:
+        - name: 'Templates/Network devices'
+      items:
+        - uuid: 62c2558cc3b24573bb425869bd680ae0
+          name: 'EdgeMAX: Load average last 1 minute'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2021.10.1.3.1
+          key: Load1Minute
+          history: 1d
+          value_type: FLOAT
+          tags:
+            - tag: component
+              value: load
+            - tag: component
+              value: system
+          triggers:
+            - uuid: 229564ad1b274f4887812a3af0ffafc6
+              expression: 'last(/EdgeMAX SNMPv2/Load1Minute)>{$LOAD_AVG_PER_CPU.MAX.WARN}'
+              recovery_mode: RECOVERY_EXPRESSION
+              recovery_expression: 'last(/EdgeMAX SNMPv2/Load1Minute)<{$LOAD_AVG_PER_CPU.MAX.WARN}'
+              name: 'EdgeMAX: Load average is too high (per CPU load over {$LOAD_AVG_PER_CPU.MAX.WARN} for 1m)'
+              opdata: 'Load averages(1m): {ITEM.LASTVALUE1}'
+              priority: AVERAGE
+              description: 'Per CPU load average is too high. Your system may be slow to respond.'
+              tags:
+                - tag: scope
+                  value: performance
+        - uuid: 268fe8c15d99415dafd32fec95ebb9f0
+          name: 'EdgeMAX: Load average last 5 minute'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2021.10.1.3.2
+          key: Load5Minute
+          history: 1d
+          value_type: FLOAT
+          description: '5 minute Load'
+          tags:
+            - tag: component
+              value: load
+            - tag: component
+              value: system
+        - uuid: effdbb0807574ffa80fa9ee2deaf9685
+          name: 'EdgeMAX: Load average last 15 minutes'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2021.10.1.3.3
+          key: Load15Minute
+          history: 1d
+          value_type: FLOAT
+          description: '15 minute Load'
+          tags:
+            - tag: component
+              value: load
+            - tag: component
+              value: system
+        - uuid: 55d17189b0894e5bb5aed103ca860527
+          name: 'EdgeMAX: Total amount of available memory'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2021.4.6.0
+          key: MemAvailable
+          history: 7d
+          trends: '0'
+          units: b
+          preprocessing:
+            - type: MULTIPLIER
+              parameters:
+                - '1000'
+          tags:
+            - tag: component
+              value: memory
+            - tag: component
+              value: system
+        - uuid: 8a61a3d93e194ee7a44420db20b37de6
+          name: 'EdgeMAX: Total amount of buffers'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2021.4.14.0
+          key: MemBuffers
+          history: 7d
+          trends: '0'
+          units: b
+          preprocessing:
+            - type: MULTIPLIER
+              parameters:
+                - '1000'
+          tags:
+            - tag: component
+              value: memory
+            - tag: component
+              value: system
+        - uuid: c858f465d2bb4651a23bcfa86596c371
+          name: 'EdgeMAX: Total amount of cached'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2021.4.15.0
+          key: MemCached
+          history: 7d
+          trends: '0'
+          units: b
+          preprocessing:
+            - type: MULTIPLIER
+              parameters:
+                - '1000'
+          tags:
+            - tag: component
+              value: memory
+            - tag: component
+              value: system
+        - uuid: ba758bc30b3a47f69f834e6815589a2d
+          name: 'EdgeMAX: Total amount of memory'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2021.4.5.0
+          key: MemTotal
+          history: 7d
+          trends: '0'
+          units: b
+          preprocessing:
+            - type: MULTIPLIER
+              parameters:
+                - '1000'
+          tags:
+            - tag: component
+              value: memory
+            - tag: component
+              value: system
+        - uuid: b3f2f99e384a492d8d838c007a9f1081
+          name: 'EdgeMAX: Used memory'
+          type: CALCULATED
+          key: MemUsed
+          history: 7d
+          trends: '0'
+          units: b
+          params: last(//MemTotal)-last(//MemAvailable)
+          tags:
+            - tag: component
+              value: memory
+            - tag: component
+              value: system
+        - uuid: 74e161402bc1440e8d30a413c7a0968e
+          name: 'EdgeMAX: Memory utizilation'
+          type: CALCULATED
+          key: MemUtil
+          history: 7d
+          value_type: FLOAT
+          trends: '0'
+          units: '%'
+          params: '(last(//MemUsed)-last(//MemBuffers)-last(//MemCached))/last(//MemTotal)*100'
+          preprocessing:
+            - type: JAVASCRIPT
+              parameters:
+                - 'return Math.floor(value)'
+          tags:
+            - tag: component
+              value: memory
+            - tag: component
+              value: system
+          triggers:
+            - uuid: a30deff68b824ca2b8cd81ae889cdf2f
+              expression: 'min(/EdgeMAX SNMPv2/MemUtil,5m)>{$MEMORY.UTIL.MAX}'
+              recovery_mode: RECOVERY_EXPRESSION
+              recovery_expression: 'max(/EdgeMAX SNMPv2/MemUtil,5m)<{$MEMORY.UTIL.MAX}'
+              name: 'EdgeMAX: High memory utilization ( >{$MEMORY.UTIL.MAX}% for 5m)'
+              opdata: 'Memory utilization: {ITEM.LASTVALUE1}'
+              priority: WARNING
+              description: 'The system is running out of free memory.'
+              tags:
+                - tag: scope
+                  value: performance
+        - uuid: 84ca994c46c745c188b66049cd7876b2
+          name: 'CPU utilization'
+          type: CALCULATED
+          key: system.cpu.util
+          history: 7d
+          value_type: FLOAT
+          params: 'avg(last_foreach(//sys.cpu_load[*],1m))'
+        - uuid: 0452cf98dc254c81b8a71784599a7515
+          name: 'EdgeMAX: CPU Discovery Master SNMP Item'
+          type: SNMP_AGENT
+          snmp_oid: 'walk[1.3.6.1.2.1.25.3.2.1.1,1.3.6.1.2.1.25.3.2.1.2]'
+          key: system.hr.devices.walk
+          delay: 1d
+          history: '0'
+          value_type: TEXT
+          trends: '0'
+          description: 'Base item for enumerated hardware resources.'
+      discovery_rules:
+        - uuid: be1135f460a74849ababed15f93ccceb
+          name: 'CPU discovery (dependent)'
+          type: DEPENDENT
+          key: cpu.discovery
+          delay: '0'
+          item_prototypes:
+            - uuid: 3b9727a57dee4742b7684130e845e676
+              name: 'CPU{#CPU_COUNTER} load'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.2.1.25.3.3.1.2.{#DEV_ID}'
+              key: 'sys.cpu_load[{#CPU_COUNTER}]'
+              history: 7d
+              units: '%'
+          master_item:
+            key: system.hr.devices.walk
+          preprocessing:
+            - type: SNMP_WALK_TO_JSON
+              parameters:
+                - '{#DEV_ID}'
+                - 1.3.6.1.2.1.25.3.2.1.1
+                - '0'
+                - '{#DEV_TYPE}'
+                - 1.3.6.1.2.1.25.3.2.1.2
+                - '0'
+            - type: JAVASCRIPT
+              parameters:
+                - |
+                  try {
+                      var data = JSON.parse(value);
+                  }
+                  catch (error) {
+                      throw 'Failed to parse JSON of HOST-RESOURCES-MIB::hrProcessorLoad discovery';
+                  }
+                  
+                  var fields = ['{#SNMPINDEX}', '{#DEV_ID}', '{#DEV_TYPE}'];
+                  var filteredData = data.filter(function (element) {
+                      return element['{#DEV_TYPE}'] === '.1.3.6.1.2.1.25.3.1.3';
+                  });
+                  
+                  var counter = 0;
+                  
+                  filteredData.forEach(function (element) {
+                      fields.forEach(function (field) {
+                          element[field] = element[field] || '';
+                      });
+                      element['{#CPU_COUNTER}'] = counter++; 
+                  });
+                  
+                  return JSON.stringify(filteredData);
+                  
+        - uuid: 36f64bd4b35d41d9a8fde299df72ca9a
+          name: 'Network interfaces discovery'
+          type: SNMP_AGENT
+          snmp_oid: 'discovery[{#IFOPERSTATUS},1.3.6.1.2.1.2.2.1.8,{#IFNAME},1.3.6.1.2.1.31.1.1.1.1]'
+          key: NetworkInterface
+          delay: 1d
+          lifetime: 30d
+          enabled_lifetime_type: DISABLE_NEVER
+          item_prototypes:
+            - uuid: a922c4529f82490287f0cbb29997f331
+              name: 'Interface {#IFNAME} : Bits received'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.2.1.31.1.1.1.6.{#SNMPINDEX}'
+              key: 'net.if.in[ifHCInOctets.{#SNMPINDEX}]'
+              history: 7d
+              trends: '0'
+              units: bps
+              preprocessing:
+                - type: CHANGE_PER_SECOND
+                  parameters:
+                    - ''
+                - type: MULTIPLIER
+                  parameters:
+                    - '8'
+              tags:
+                - tag: Application
+                  value: 'Interface Speed'
+                - tag: component
+                  value: network
+            - uuid: c01af9e30682460fa97177bc067f7327
+              name: 'Interface {#IFNAME} : Address'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.2.1.4.20.1.1[index, 1.3.6.1.2.1.4.20.1.2, {#SNMPINDEX}]'
+              key: 'net.if.ip[ipAddrEntry.{#SNMPINDEX}]'
+              delay: 10m
+              value_type: TEXT
+              trends: '0'
+              tags:
+                - tag: Application
+                  value: 'interface ip address'
+                - tag: component
+                  value: network
+              trigger_prototypes:
+                - uuid: b3ee11aac54940819c9615d7ced39e33
+                  expression: 'last(/EdgeMAX SNMPv2/net.if.ip[ipAddrEntry.{#SNMPINDEX}],#1)<>last(/EdgeMAX SNMPv2/net.if.ip[ipAddrEntry.{#SNMPINDEX}],#2) and length(last(/EdgeMAX SNMPv2/net.if.ip[ipAddrEntry.{#SNMPINDEX}]))>0'
+                  recovery_mode: NONE
+                  name: 'EdgeMAX: Interface {#IFNAME} address has changed'
+                  event_name: 'EdgeMAX: Interface {#IFNAME} address on {HOST.HOST} has changed from {FUNCTION.VALUE2} to {FUNCTION.VALUE3}.'
+                  opdata: 'Interface {#IFNAME} address is  {ITEM.LASTVALUE1}'
+                  priority: INFO
+                  description: 'The interface address has changed. Acknowledge to close the problem manually.'
+                  type: MULTIPLE
+                  manual_close: 'YES'
+            - uuid: b067d0d9f6cf4212a35849f2d6d6309f
+              name: 'Interface {#IFNAME} : Bits sent'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.2.1.31.1.1.1.10.{#SNMPINDEX}'
+              key: 'net.if.out[ifHCOutOctets.{#SNMPINDEX}]'
+              history: 7d
+              trends: '0'
+              units: bps
+              preprocessing:
+                - type: CHANGE_PER_SECOND
+                  parameters:
+                    - ''
+                - type: MULTIPLIER
+                  parameters:
+                    - '8'
+              tags:
+                - tag: Application
+                  value: 'Interface Speed'
+                - tag: component
+                  value: network
+            - uuid: bf8592a3ac8246f7b883b387438c80c2
+              name: 'Interface {#IFNAME} : Speed'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.2.1.2.2.1.5.{#SNMPINDEX}'
+              key: 'net.if.speed[ifHighSpeed.{#SNMPINDEX}]'
+              delay: 10m
+              history: 1d
+              trends: '0'
+              units: bps
+              preprocessing:
+                - type: DISCARD_UNCHANGED_HEARTBEAT
+                  parameters:
+                    - 1h
+              tags:
+                - tag: Application
+                  value: 'Interface Speed'
+                - tag: component
+                  value: network
+            - uuid: 650af0d82a9f495db7b174940d56a873
+              name: 'Interface {#IFNAME} : Status'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.2.1.2.2.1.8.{#SNMPINDEX}'
+              key: 'net.if.status[ifOperStatus.{#SNMPINDEX}]'
+              history: 7d
+              trends: '0'
+              valuemap:
+                name: ifOperStatus
+              tags:
+                - tag: Application
+                  value: 'interface status'
+                - tag: component
+                  value: network
+              trigger_prototypes:
+                - uuid: f28b60068151468daf04255aca727604
+                  expression: 'last(/EdgeMAX SNMPv2/net.if.status[ifOperStatus.{#SNMPINDEX}])<>1'
+                  name: 'EdgeMAX: Interface {#IFNAME} is not up (1).'
+                  event_name: 'EdgeMAX: Interface {#IFNAME} on {HOST.HOST} status is not up (1).'
+                  opdata: 'Interface is currently {ITEM.VALUE1}'
+                  status: DISABLED
+                  priority: AVERAGE
+                  description: 'Interface status is not up (1). Get the interface up again to close the problem automatically.'
+                - uuid: ed8cfda8eff44c01a8c18956bb18aef5
+                  expression: 'last(/EdgeMAX SNMPv2/net.if.status[ifOperStatus.{#SNMPINDEX}],#1)<>last(/EdgeMAX SNMPv2/net.if.status[ifOperStatus.{#SNMPINDEX}],#2) and last(/EdgeMAX SNMPv2/net.if.status[ifOperStatus.{#SNMPINDEX}],#2)=1'
+                  recovery_mode: RECOVERY_EXPRESSION
+                  recovery_expression: 'last(/EdgeMAX SNMPv2/net.if.status[ifOperStatus.{#SNMPINDEX}],#1)=1'
+                  name: 'EdgeMAX: Interface {#IFNAME} status has changed'
+                  event_name: 'EdgeMAX: Interface {#IFNAME} on {HOST.HOST} status has changed from up (1).'
+                  opdata: 'Interface is currently {ITEM.VALUE1}'
+                  priority: AVERAGE
+                  description: 'Interface status has changed from up (1). Acknowledge to close the problem manually or get the interface up again to close the problem automatically'
+                  manual_close: 'YES'
+          graph_prototypes:
+            - uuid: 50b02b31a5c849ed8a469cbc1f74bb1f
+              name: 'Interface {#IFNAME}: Network traffic'
+              ymin_type_1: FIXED
+              graph_items:
+                - color: F63100
+                  calc_fnc: ALL
+                  item:
+                    host: 'EdgeMAX SNMPv2'
+                    key: 'net.if.in[ifHCInOctets.{#SNMPINDEX}]'
+                - sortorder: '1'
+                  color: 199C0D
+                  calc_fnc: ALL
+                  item:
+                    host: 'EdgeMAX SNMPv2'
+                    key: 'net.if.out[ifHCOutOctets.{#SNMPINDEX}]'
+      macros:
+        - macro: '{$LOAD_AVG_PER_CPU.MAX.WARN}'
+          value: '1.5'
+          description: 'This macro is used as a threshold in memory utilization trigger.'
+        - macro: '{$MEMORY.UTIL.MAX}'
+          value: '90'
+          description: 'This macro is used as a threshold in memory utilization trigger.'
+      dashboards:
+        - uuid: f58a92b380334662982059edbee55cd7
+          name: 'EdgeMAX: Network Interfaces'
+          pages:
+            - widgets:
+                - type: graphprototype
+                  name: 'EdgeMAX: Network Interfaces'
+                  width: '72'
+                  height: '12'
+                  fields:
+                    - type: INTEGER
+                      name: columns
+                      value: '3'
+                    - type: GRAPH_PROTOTYPE
+                      name: graphid
+                      value:
+                        host: 'EdgeMAX SNMPv2'
+                        name: 'Interface {#IFNAME}: Network traffic'
+                    - type: STRING
+                      name: reference
+                      value: AAAAA
+                    - type: INTEGER
+                      name: rows
+                      value: '3'
+        - uuid: 04ea8df74b3c4bfaaebb86184b65dc23
+          name: 'EdgeMAX: System Statistics'
+          pages:
+            - widgets:
+                - type: item
+                  width: '24'
+                  hide_header: 'YES'
+                  fields:
+                    - type: ITEM
+                      name: itemid.0
+                      value:
+                        host: 'EdgeMAX SNMPv2'
+                        key: system.name
+                    - type: INTEGER
+                      name: show.0
+                      value: '2'
+                    - type: INTEGER
+                      name: units_bold
+                      value: '0'
+                    - type: INTEGER
+                      name: units_show
+                      value: '0'
+                - type: graph
+                  'y': '2'
+                  width: '72'
+                  height: '5'
+                  fields:
+                    - type: GRAPH
+                      name: graphid.0
+                      value:
+                        host: 'EdgeMAX SNMPv2'
+                        name: 'EdgeMAX: CPU Load'
+                    - type: STRING
+                      name: reference
+                      value: DFDWE
+                - type: graph
+                  'y': '7'
+                  width: '36'
+                  height: '5'
+                  fields:
+                    - type: GRAPH
+                      name: graphid.0
+                      value:
+                        host: 'EdgeMAX SNMPv2'
+                        name: 'EdgeMAX:  Memory usage'
+                    - type: STRING
+                      name: reference
+                      value: AAAAA
+                - type: graph
+                  'y': '12'
+                  width: '72'
+                  height: '5'
+                  fields:
+                    - type: GRAPH
+                      name: graphid.0
+                      value:
+                        host: 'EdgeMAX SNMPv2'
+                        name: 'EdgeMAX: System Load'
+                    - type: STRING
+                      name: reference
+                      value: FFKHC
+                - type: graph
+                  'y': '17'
+                  width: '36'
+                  height: '5'
+                  fields:
+                    - type: GRAPH
+                      name: graphid.0
+                      value:
+                        host: 'EdgeMAX SNMPv2'
+                        name: 'Generic by SNMP: Ping time'
+                    - type: STRING
+                      name: reference
+                      value: AAAAC
+                - type: item
+                  name: 'Uptime (network)'
+                  x: '24'
+                  width: '12'
+                  fields:
+                    - type: ITEM
+                      name: itemid.0
+                      value:
+                        host: 'EdgeMAX SNMPv2'
+                        key: 'system.net.uptime[sysUpTime.0]'
+                    - type: INTEGER
+                      name: show.0
+                      value: '2'
+                - type: item
+                  name: 'Uptime (hardware)'
+                  x: '36'
+                  width: '12'
+                  fields:
+                    - type: ITEM
+                      name: itemid.0
+                      value:
+                        host: 'EdgeMAX SNMPv2'
+                        key: 'system.hw.uptime[hrSystemUptime.0]'
+                    - type: INTEGER
+                      name: show.0
+                      value: '2'
+                - type: graph
+                  x: '36'
+                  'y': '7'
+                  width: '36'
+                  height: '5'
+                  fields:
+                    - type: GRAPH
+                      name: graphid.0
+                      value:
+                        host: 'EdgeMAX SNMPv2'
+                        name: 'EdgeMAX: Memory Used'
+                    - type: STRING
+                      name: reference
+                      value: AAAAD
+                - type: graph
+                  x: '36'
+                  'y': '17'
+                  width: '36'
+                  height: '5'
+                  fields:
+                    - type: GRAPH
+                      name: graphid.0
+                      value:
+                        host: 'EdgeMAX SNMPv2'
+                        name: 'Generic by SNMP: Ping lost'
+                    - type: STRING
+                      name: reference
+                      value: AAAAE
+      valuemaps:
+        - uuid: 5040d26951114decbb582ae0589c463a
+          name: ifOperStatus
+          mappings:
+            - value: '1'
+              newvalue: up
+            - value: '2'
+              newvalue: down
+            - value: '3'
+              newvalue: testing
+            - value: '4'
+              newvalue: unknown
+            - value: '5'
+              newvalue: dormant
+            - value: '6'
+              newvalue: notPresent
+            - value: '7'
+              newvalue: lowerLayerDow
+  graphs:
+    - uuid: 7445893be4c448ceae6c01ccc251aef0
+      name: 'EdgeMAX: CPU Load'
+      ymin_type_1: FIXED
+      graph_items:
+        - color: 199C0D
+          calc_fnc: ALL
+          item:
+            host: 'EdgeMAX SNMPv2'
+            key: system.cpu.util
+    - uuid: 66415b709399470bb181f7c604f7b00a
+      name: 'EdgeMAX:  Memory usage'
+      height: '500'
+      show_work_period: 'NO'
+      show_triggers: 'NO'
+      type: STACKED
+      graph_items:
+        - color: F63100
+          calc_fnc: MIN
+          item:
+            host: 'EdgeMAX SNMPv2'
+            key: MemBuffers
+        - sortorder: '1'
+          color: 2774A4
+          calc_fnc: MIN
+          item:
+            host: 'EdgeMAX SNMPv2'
+            key: MemCached
+        - sortorder: '2'
+          color: 199C0D
+          calc_fnc: MIN
+          item:
+            host: 'EdgeMAX SNMPv2'
+            key: MemAvailable
+    - uuid: f260a63bc3b04c3b80b47f83bb05ed9c
+      name: 'EdgeMAX: Memory Used'
+      percent_right: '50'
+      ymin_type_1: FIXED
+      graph_items:
+        - color: 199C0D
+          calc_fnc: ALL
+          item:
+            host: 'EdgeMAX SNMPv2'
+            key: MemUtil
+    - uuid: f6837489bd7246fcb6296b62a604b6a1
+      name: 'EdgeMAX: System Load'
+      ymin_type_1: FIXED
+      graph_items:
+        - color: 199C0D
+          calc_fnc: ALL
+          item:
+            host: 'EdgeMAX SNMPv2'
+            key: Load1Minute
+        - sortorder: '1'
+          color: F63100
+          calc_fnc: ALL
+          item:
+            host: 'EdgeMAX SNMPv2'
+            key: Load5Minute
+        - sortorder: '2'
+          color: 2774A4
+          calc_fnc: ALL
+          item:
+            host: 'EdgeMAX SNMPv2'
+            key: Load15Minute

@@ -6,14 +6,15 @@ This template allows you to quickly get up and running with monitoring of Ubiqui
 
 1. Select a branch according to your Zabbix version and download the xml.
 2. Import *zbx_edgemax_template.xml* to Zabbix (Configuration -> Templates -> Import)
-3. Add the template *EdgeMAX SNMPv2* to your host and configure 
+3. Add the template *EdgeMAX SNMPv2* to your host and configure
    1. Add *{$SNMP_COMMUNITY}* to your host's macros and configure it. (default is usually public)
 4. Enable the *SNMP* agent on your EdgeMAX device.
    1. Set *SNMP community* to the same value as your macro or the other way around.
 
 ## 🏷️ Features
+- ✔️ Support Zabbix 7.0 yaml template format
 - ✔️ Monitoring of memory utiliziation of system
-- ✔️ Monitoring of CPU load
+- ✔️ Monitoring of CPU load percents and Load Average
 - ✔️ Auto discovering of network interfaces
 - ✔️ Monitoring address per network interface
 - ✔️ Monitoring traffic in/out per network interface
@@ -25,7 +26,7 @@ This template allows you to quickly get up and running with monitoring of Ubiqui
 Items with checks are enable by default. Those with Xs are disabled by default. You can customise your triggers to your needs per network interfaces.
 
 From linked template:
-- ✅ High ping loss 
+- ✅ High ping loss
 - ✅ High response time
 - ✅ Host has been restarted
 - ✅ No SNMP data
