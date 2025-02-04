@@ -240,7 +240,6 @@ zabbix_export:
                   });
                   
                   return JSON.stringify(filteredData);
-                  
         - uuid: 36f64bd4b35d41d9a8fde299df72ca9a
           name: 'Network interfaces discovery'
           type: SNMP_AGENT
@@ -473,19 +472,6 @@ zabbix_export:
                     - type: STRING
                       name: reference
                       value: FFKHC
-                - type: graph
-                  'y': '17'
-                  width: '36'
-                  height: '5'
-                  fields:
-                    - type: GRAPH
-                      name: graphid.0
-                      value:
-                        host: 'EdgeMAX SNMPv2'
-                        name: 'Generic by SNMP: Ping time'
-                    - type: STRING
-                      name: reference
-                      value: AAAAC
                 - type: item
                   name: 'Uptime (network)'
                   x: '24'
@@ -526,20 +512,6 @@ zabbix_export:
                     - type: STRING
                       name: reference
                       value: AAAAD
-                - type: graph
-                  x: '36'
-                  'y': '17'
-                  width: '36'
-                  height: '5'
-                  fields:
-                    - type: GRAPH
-                      name: graphid.0
-                      value:
-                        host: 'EdgeMAX SNMPv2'
-                        name: 'Generic by SNMP: Ping lost'
-                    - type: STRING
-                      name: reference
-                      value: AAAAE
       valuemaps:
         - uuid: 5040d26951114decbb582ae0589c463a
           name: ifOperStatus
